@@ -11,8 +11,7 @@ RESET="\[$(tput sgr0)\]"
 BOLD="\[$(tput bold)\]"
 
 parse_kube_ctx() {
-  cat ~/.kube/config 2> /dev/null | \
-  grep "^current-context:" | \
+  grep "^current-context:" ~/.kube/config 2> /dev/null | \
   sed "s/^current-context: //" | \
   grep -v '""' | \
   sed -E -e "s/tink\.teleport\.sh-//" \
@@ -23,10 +22,10 @@ parse_kube_ctx() {
 }
 
 function build_prompt() {
-    valid_for="$(tsh status | sed -n 's/.*valid for \(.*\)]/\1/p')"
+    valid_for="$(tsh status 2>/dev/null | sed -n 's/.*\[\(.*\)\]/\1/p')"
     PS1="${BOLD}"
     PS1+="${RED}[${WHITE}\t${RED}] "                                        # timestamp
-    PS1+="${BLUE}<${WHITE}teleport: ${valid_for:-not logged in}${BLUE}> "  # teleport indicator
+    PS1+="${BLUE}<${WHITE}teleport: ${valid_for:-n/a}${BLUE}> "  # teleport indicator
     PS1+="${BLUE}\W/ "                                                      # cwd
     PS1+="$(parse_kube_ctx)"                                                # k8s context
     PS1+="${BOLD}${YELLOW}$ ${RESET}"                                       # prompt indicator
@@ -45,4 +44,25 @@ if [ -f '/home/user/google-cloud-sdk/completion.bash.inc' ]; then . '/home/user/
 source /etc/bash_completion
 source <(kubectl completion bash)
 
-alias tsh-init="tsh login --proxy=tink.teleport.sh:443
+alias tsh-init="tsh login --proxy=tink.teleport.sh:443"
+
+function tsh-prod() {
+    if [ $# -ne 1 ]; then
+        tsh login --proxy=tink.teleport.sh:443 --request-roles=tink-production-user
+    else
+        tsh login --request-id="${1}"
+    fi
+}
+
+function tsh-help() {
+    echo
+    echo -e "On first login use \e[34mtsh-init\e[0m"
+    echo
+    echo -e "\e[34mtsh-prod\e[0m to request access to prod environments"
+    echo -e "\e[34mtsh-prod <request-id>\e[0m to login to prod after approval"
+    echo
+    echo -e "\e[34mtsh kube ls\e[0m to list all clusters"
+    echo -e "\e[34mtsh kube login <clustername>\e[0m to log into a cluster"
+}
+
+tsh-help
