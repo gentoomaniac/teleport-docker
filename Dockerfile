@@ -13,7 +13,6 @@ RUN curl https://apt.releases.teleport.dev/gpg -o /usr/share/keyrings/teleport-a
     apt install --yes teleport
 
 RUN useradd --create-home --shell /usr/bin/bash user
-COPY bashrc /home/user/.bashrc
 USER user
 WORKDIR /home/user
 
@@ -22,5 +21,6 @@ RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cl
     ./google-cloud-sdk/install.sh && \
     /home/user/google-cloud-sdk/bin/gcloud components install kubectl
 
-EXPOSE 36319
+COPY bashrc /home/user/.bashrc
+
 VOLUME [ "/home/user/.tsh" ]
