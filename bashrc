@@ -23,12 +23,13 @@ parse_kube_ctx() {
 }
 
 function build_prompt() {
+    valid_for="$(tsh status | sed -n 's/.*valid for \(.*\)]/\1/p')"
     PS1="${BOLD}"
-    PS1+="${RED}[${WHITE}\t${RED}] "                                                             # timestamp
-    PS1+="${BLUE}<${WHITE}teleport${BLUE}> "
-    PS1+="${BLUE}\W/ "                                                                           # cwd
-    PS1+="$(parse_kube_ctx)"                                                                     # k8s context
-    PS1+="${BOLD}${YELLOW}>${RESET} "                                                            # prompt indicator
+    PS1+="${RED}[${WHITE}\t${RED}] "                                        # timestamp
+    PS1+="${BLUE}<${WHITE}teleport: ${valid_for:-not logged in}${BLUE}> "  # teleport indicator
+    PS1+="${BLUE}\W/ "                                                      # cwd
+    PS1+="$(parse_kube_ctx)"                                                # k8s context
+    PS1+="${BOLD}${YELLOW}$ ${RESET}"                                       # prompt indicator
 }
 
 PROMPT_COMMAND=build_prompt
