@@ -42,6 +42,7 @@ if [ -f '/home/user/google-cloud-sdk/path.bash.inc' ]; then . '/home/user/google
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/user/google-cloud-sdk/completion.bash.inc' ]; then . '/home/user/google-cloud-sdk/completion.bash.inc'; fi
 # bash completion
+source /etc/bash_completion
 source <(kubectl completion bash)
 
 alias teleport-init="tsh login --proxy=tink.teleport.sh:443 --bind-addr=127.0.0.1:36319"
