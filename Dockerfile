@@ -5,7 +5,7 @@ FROM ${OS}:${CODENAME}
 ARG OS
 ARG CODENAME
 
-RUN apt update && apt install --yes curl
+RUN apt update && apt install --yes curl bash-completion
 
 RUN curl https://apt.releases.teleport.dev/gpg -o /usr/share/keyrings/teleport-archive-keyring.asc && \
     echo "deb [signed-by=/usr/share/keyrings/teleport-archive-keyring.asc] https://apt.releases.teleport.dev/${OS?} ${CODENAME?} stable/v11" | tee /etc/apt/sources.list.d/teleport.list && \
