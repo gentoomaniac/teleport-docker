@@ -56,13 +56,14 @@ function tsh-prod() {
 
 function tsh-help() {
     echo
-    echo -e "On first login use \e[34mtsh-init\e[0m"
+    echo -e "On first login use \e[1m\e[34mtsh-init\e[0m"
     echo
-    echo -e "\e[34mtsh-prod\e[0m to request access to prod environments"
-    echo -e "\e[34mtsh-prod <request-id>\e[0m to login to prod after approval"
+    echo -e "\e[1m\e[34mtsh-prod\e[0m to request access to prod environments"
+    echo -e "\e[1m\e[34mtsh-prod <request-id>\e[0m to login to prod after approval"
     echo
-    echo -e "\e[34mtsh kube ls\e[0m to list all clusters"
-    echo -e "\e[34mtsh kube login <clustername>\e[0m to log into a cluster"
+    echo -e "\e[1m\e[34mtsh kube ls\e[0m to list all clusters"
+    echo -e "\e[1m\e[34mtsh kube login <clustername>\e[0m to log into a cluster"
+    echo
 }
 
 tsh-help
