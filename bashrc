@@ -3,10 +3,10 @@
 # https://misc.flogisoft.com/bash/tip_colors_and_formatting
 RED="\[$(tput setaf 1)\]"
 GREEN="\[$(tput setaf 2)\]"
+YELLOW="\[$(tput setaf 3)\]"
 BLUE="\[$(tput setaf 4)\]"
 CYAN="\[$(tput setaf 6)\]"
 WHITE="\[$(tput setaf 7)\]"
-ORANGE="\[$(tput setaf 202)\]"
 RESET="\[$(tput sgr0)\]"
 BOLD="\[$(tput bold)\]"
 
@@ -17,7 +17,7 @@ parse_kube_ctx() {
   sed -E -e "s/tink\.teleport\.sh-//" \
          -e "s/(minikube)/${CYAN//\\/\\\\}[\1]${RESET//\\/\\\\} /" \
          -e "s/(.+-testing)/${GREEN//\\/\\\\}[\1]${RESET//\\/\\\\} /" \
-         -e "s/(.+-(staging|preprod))/${ORANGE//\\/\\\\}[\1]${RESET//\\/\\\\} /" \
+         -e "s/(.+-(staging|preprod))/${YELLOW//\\/\\\\}[\1]${RESET//\\/\\\\} /" \
          -e "s/(.+-production)/${RED//\\/\\\\}[\1]${RESET//\\/\\\\} /"
 }
 
@@ -26,7 +26,7 @@ function build_prompt() {
     PS1="${BOLD}"
     PS1+="${RED}[${WHITE}\t${RED}] "                                        # timestamp
     PS1+="${BLUE}<${WHITE}teleport: ${valid_for:-n/a}${BLUE}> "  # teleport indicator
-    PS1+="${BLUE}\W/ "                                                      # cwd
+    PS1+="${BLUE}\W "                                                      # cwd
     PS1+="$(parse_kube_ctx)"                                                # k8s context
     PS1+="${BOLD}${YELLOW}$ ${RESET}"                                       # prompt indicator
 }
