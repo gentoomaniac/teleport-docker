@@ -1,3 +1,8 @@
+# set bash timeout to 15 min
+TMOUT=900
+readonly TMOUT
+export TMOUT
+
 
 # prompt
 # https://misc.flogisoft.com/bash/tip_colors_and_formatting
