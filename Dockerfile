@@ -1,9 +1,12 @@
 ARG OS=ubuntu
 ARG CODENAME=jammy
+ARG CLOUDCLI_ARCH=x86_64
+
 FROM ${OS}:${CODENAME}
 
 ARG OS
 ARG CODENAME
+ARG CLOUDCLI_ARCH
 
 RUN apt update && apt install --yes curl bash-completion
 
@@ -16,8 +19,8 @@ RUN useradd --create-home --shell /usr/bin/bash user
 USER user
 WORKDIR /home/user
 
-RUN curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-413.0.0-linux-x86_64.tar.gz && \
-    tar xf google-cloud-cli-413.0.0-linux-x86_64.tar.gz && \
+RUN curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-413.0.0-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
+    tar xf "google-cloud-cli-413.0.0-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
     ./google-cloud-sdk/install.sh && \
     /home/user/google-cloud-sdk/bin/gcloud components install kubectl
 
