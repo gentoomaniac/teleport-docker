@@ -52,10 +52,14 @@ source <(kubectl completion bash)
 alias tsh-init="tsh login --proxy=tink.teleport.sh:443"
 
 function tsh-prod() {
-    if [ $# -ne 1 ]; then
-        tsh login --proxy=tink.teleport.sh:443 --request-roles=tink-production-user
-    else
+    if [[ "${1}" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}.*$ ]]; then
         tsh login --request-id="${1}"
+    else
+        CMD="tsh login --proxy=tink.teleport.sh:443 --request-roles=tink-production-user"
+        if [ ! -z "${1}" ]; then
+            CMD+=" --request-reason=\"${1}\""
+        fi
+        eval ${CMD}
     fi
 }
 
@@ -63,7 +67,7 @@ function tsh-help() {
     echo
     echo -e "On first login use \e[1m\e[34mtsh-init\e[0m"
     echo
-    echo -e "\e[1m\e[34mtsh-prod\e[0m to request access to prod environments"
+    echo -e "\e[1m\e[34mtsh-prod [REASON]\e[0m to request access to prod environments"
     echo -e "\e[1m\e[34mtsh-prod <request-id>\e[0m to login to prod after approval"
     echo
     echo -e "\e[1m\e[34mtsh kube ls\e[0m to list all clusters"
