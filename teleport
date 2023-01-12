@@ -1,3 +1,4 @@
 #!/bin/bash
+[ ! -d "${HOME}/.tsh" ] && mkdir "${HOME}/.tsh"
 
-docker run --interactive --tty --rm --network host -v "${HOME}/.tsh:/home/user/.tsh" teleport
+docker run --interactive --tty --rm -p ${TELEPORT_PORT:-4242}:${TELEPORT_PORT:-4242} -v "${HOME}/.tsh:/home/user/.tsh" teleport

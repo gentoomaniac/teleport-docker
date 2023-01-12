@@ -49,7 +49,7 @@ if [ -f '/home/user/google-cloud-sdk/completion.bash.inc' ]; then . '/home/user/
 source /etc/bash_completion
 source <(kubectl completion bash)
 
-alias tsh-init="tsh login --proxy=tink.teleport.sh:443"
+alias tsh-init="tsh login --proxy=tink.teleport.sh:443 --bind-addr=0.0.0.0:4242"
 
 function tsh-prod() {
     if [[ "${1}" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}.*$ ]]; then
