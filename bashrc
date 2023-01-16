@@ -49,13 +49,21 @@ if [ -f '/home/user/google-cloud-sdk/completion.bash.inc' ]; then . '/home/user/
 source /etc/bash_completion
 source <(kubectl completion bash)
 
-alias tsh-init="tsh login --proxy=tink.teleport.sh:443 --bind-addr=0.0.0.0:4242"
+export TELEPORT_PROXY="${TELEPORT_PROXY:-something.teleport.sh:443}"
+export PROD_ROLES="${PROD_ROLES:-production-user}"
+export LISTEN_ADDR="${LISTEN_ADDR:-0.0.0.0:4242}"
+export KUBECTL_VERSION="${KUBECTL_VERSION:-1.21}"
+
+alias tsh-init="tsh login --proxy=${TELEPORT_PROXY} --bind-addr=${LISTEN_ADDR}"
+alias kube-ls="tsh kube ls"
+alias kube-login="tsh kube login --bind-addr=${LISTEN_ADDR}"
+alias kubectl="kubectl.${KUBECTL_VERSION}"
 
 function tsh-prod() {
     if [[ "${1}" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}.*$ ]]; then
-        tsh login --request-id="${1}"
+        tsh login --request-id="${1} -bind-addr=${LISTEN_ADDR}"
     else
-        CMD="tsh login --proxy=tink.teleport.sh:443 --request-roles=tink-production-user"
+        CMD="tsh login --proxy=${TELEPORT_PROXY} -bind-addr=${LISTEN_ADDR} --request-roles=${PROD_ROLES}"
         if [ ! -z "${1}" ]; then
             CMD+=" --request-reason=\"${1}\""
         fi
@@ -70,8 +78,8 @@ function tsh-help() {
     echo -e "\e[1m\e[34mtsh-prod [REASON]\e[0m to request access to prod environments"
     echo -e "\e[1m\e[34mtsh-prod <request-id>\e[0m to login to prod after approval"
     echo
-    echo -e "\e[1m\e[34mtsh kube ls\e[0m to list all clusters"
-    echo -e "\e[1m\e[34mtsh kube login <clustername>\e[0m to log into a cluster"
+    echo -e "\e[1m\e[34mkube-ls\e[0m to list all clusters"
+    echo -e "\e[1m\e[34mkube-login <clustername>\e[0m to log into a cluster"
     echo
 }
 
