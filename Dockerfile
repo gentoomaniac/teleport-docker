@@ -7,8 +7,10 @@ FROM ${OS}:${CODENAME}
 ARG OS
 ARG CODENAME
 ARG CLOUDCLI_ARCH
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Stockholm
 
-RUN apt update && apt install --yes curl bash-completion
+RUN apt update && apt install --yes curl bash-completion gawk vim-nox less python3
 
 RUN curl https://apt.releases.teleport.dev/gpg -o /usr/share/keyrings/teleport-archive-keyring.asc && \
     echo "deb [signed-by=/usr/share/keyrings/teleport-archive-keyring.asc] https://apt.releases.teleport.dev/${OS?} ${CODENAME?} stable/v11" | tee /etc/apt/sources.list.d/teleport.list && \

@@ -4,5 +4,5 @@
 docker run --interactive --tty --rm \
     -p ${TELEPORT_PORT:-4242}:${TELEPORT_PORT:-4242} \
     -e "TELEPORT_PROXY=${TELEPORT_PROXY:-xxxx.teleport.sh:443}" \
-    -e "PROD_ROLES=${PROD_ROLES:-xxxx-production-user}"
+    -e "PROD_ROLES=${PROD_ROLES:-xxxx-production-user}" \
     -v "${HOME}/.tsh:/home/user/.tsh" teleport
