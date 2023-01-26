@@ -51,19 +51,20 @@ source <(kubectl completion bash)
 
 export TELEPORT_PROXY="${TELEPORT_PROXY:-something.teleport.sh:443}"
 export PROD_ROLES="${PROD_ROLES:-production-user}"
-export LISTEN_ADDR="${LISTEN_ADDR:-0.0.0.0:4242}"
+export LISTEN_ADDR="${LISTEN_ADDR:-0.0.0.0}"
+export LISTEN_PORT="${LISTEN_PORT:-4242}"
 export KUBECTL_VERSION="${KUBECTL_VERSION:-1.21}"
 
-alias tsh-init="tsh login --proxy=${TELEPORT_PROXY} --bind-addr=${LISTEN_ADDR}"
+alias tsh-init="tsh login --proxy=${TELEPORT_PROXY} --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
 alias kube-ls="tsh kube ls"
-alias kube-login="tsh kube login --bind-addr=${LISTEN_ADDR}"
+alias kube-login="tsh kube login --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
 alias kubectl="kubectl.${KUBECTL_VERSION}"
 
 function tsh-prod() {
     if [[ "${1}" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}.*$ ]]; then
-        tsh login --request-id="${1} -bind-addr=${LISTEN_ADDR}"
+        tsh login --request-id="${1} -bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
     else
-        CMD="tsh login --proxy=${TELEPORT_PROXY} -bind-addr=${LISTEN_ADDR} --request-roles=${PROD_ROLES}"
+        CMD="tsh login --proxy=${TELEPORT_PROXY} -bind-addr=${LISTEN_ADDR}:${LISTEN_PORT} --request-roles=${PROD_ROLES}"
         if [ ! -z "${1}" ]; then
             CMD+=" --request-reason=\"${1}\""
         fi

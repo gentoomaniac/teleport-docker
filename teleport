@@ -1,8 +1,10 @@
 #!/bin/bash
 [ ! -d "${HOME}/.tsh" ] && mkdir "${HOME}/.tsh"
 
+DEFAULT_PORT=$(( ( RANDOM % 10000 )  + 1024 ))
 docker run --interactive --tty --rm \
-    -p ${TELEPORT_PORT:-4242}:${TELEPORT_PORT:-4242} \
-    -e "TELEPORT_PROXY=${TELEPORT_PROXY:-xxxx.teleport.sh:443}" \
+    -p ${TELEPORT_PORT:-${DEFAULT_PORT}}:${TELEPORT_PORT:-${DEFAULT_PORT}} \
     -e "PROD_ROLES=${PROD_ROLES:-xxxx-production-user}" \
+    -e "TELEPORT_PROXY=${TELEPORT_PROXY:-xxxx.teleport.sh:443}" \
+    -e "LISTEN_PORT=${TELEPORT_PORT:-${DEFAULT_PORT}}" \
     -v "${HOME}/.tsh:/home/user/.tsh" teleport
