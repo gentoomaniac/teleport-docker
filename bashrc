@@ -62,9 +62,9 @@ alias kubectl="kubectl.${KUBECTL_VERSION}"
 
 function tsh-prod() {
     if [[ "${1}" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}.*$ ]]; then
-        tsh login --request-id="${1} -bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
+        tsh login --request-id="${1} --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
     else
-        CMD="tsh login --proxy=${TELEPORT_PROXY} -bind-addr=${LISTEN_ADDR}:${LISTEN_PORT} --request-roles=${PROD_ROLES}"
+        CMD="tsh login --proxy=${TELEPORT_PROXY} --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT} --request-roles=${PROD_ROLES}"
         if [ ! -z "${1}" ]; then
             CMD+=" --request-reason=\"${1}\""
         fi
