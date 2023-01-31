@@ -1,3 +1,10 @@
+export TELEPORT_PROXY="${TELEPORT_PROXY:-something.teleport.sh:443}"
+export PROD_ROLES="${PROD_ROLES:-production-user}"
+export LISTEN_ADDR="${LISTEN_ADDR:-0.0.0.0}"
+export LISTEN_PORT="${LISTEN_PORT:-4242}"
+export KUBECTL_VERSION="${KUBECTL_VERSION:-1.21}"
+export TEAM="${TEAM:-nabu}"
+
 # set bash timeout to 15 min
 TMOUT=900
 readonly TMOUT
@@ -49,16 +56,15 @@ if [ -f '/home/user/google-cloud-sdk/completion.bash.inc' ]; then . '/home/user/
 source /etc/bash_completion
 source <(kubectl completion bash)
 
-export TELEPORT_PROXY="${TELEPORT_PROXY:-something.teleport.sh:443}"
-export PROD_ROLES="${PROD_ROLES:-production-user}"
-export LISTEN_ADDR="${LISTEN_ADDR:-0.0.0.0}"
-export LISTEN_PORT="${LISTEN_PORT:-4242}"
-export KUBECTL_VERSION="${KUBECTL_VERSION:-1.21}"
-
 alias tsh-init="tsh login --proxy=${TELEPORT_PROXY} --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
 alias kube-ls="tsh kube ls"
 alias kube-login="tsh kube login --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
-alias kubectl="kubectl.${KUBECTL_VERSION}"
+
+alias kubectl="kubectl.${KUBECTL_VERSION} --as=reader"
+complete -o default -F __start_kubectl kubectl
+
+alias kwacc="kubectl.${KUBECTL_VERSION} --as=${TEAM}-oncaller"
+complete -o default -F __start_kubectl kwacc
 
 function tsh-prod() {
     if [[ "${1}" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}.*$ ]]; then
@@ -82,6 +88,7 @@ function tsh-help() {
     echo -e "\e[1m\e[34mkube-ls\e[0m to list all clusters"
     echo -e "\e[1m\e[34mkube-login <clustername>\e[0m to log into a cluster"
     echo
+    echo -e "\e[1m\e[34mkwacc\e[0m kubectl --as=${TEAM}-oncaller"
 }
 
 tsh-help
