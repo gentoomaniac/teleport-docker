@@ -14,18 +14,21 @@ ARG CLOUDCLI_VERSION
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Stockholm
 
-RUN apt update && apt install --yes curl bash-completion gawk vim-nox less python3 jq
+RUN apt update && apt install --yes curl bash-completion gawk vim-nox less python3 jq ca-certificates
 
 RUN curl https://goteleport.com/static/install.sh | bash -s ${TELEPORT_VERSION}
+
+COPY caadmin.netskope.com.crt /usr/local/share/ca-certificates/caadmin.netskope.com.crt
+RUN update-ca-certificates
 
 RUN useradd --create-home --shell /usr/bin/bash user
 USER user
 WORKDIR /home/user
 
 RUN curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
-  tar xf "google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
-  ./google-cloud-sdk/install.sh && \
-  /home/user/google-cloud-sdk/bin/gcloud components install kubectl
+    tar xf "google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
+    ./google-cloud-sdk/install.sh && \
+    /home/user/google-cloud-sdk/bin/gcloud components install kubectl
 
 COPY bashrc /home/user/.bashrc
 
