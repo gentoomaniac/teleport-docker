@@ -26,7 +26,7 @@ USER user
 WORKDIR /home/user
 
 RUN case ${TARGETARCH} in \
-    "arm64")  CLOUDCLI_ARCH=arm  ;; \
+    "linux/arm64")  CLOUDCLI_ARCH=arm  ;; \
     esac && \
     curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
     tar xf "google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
