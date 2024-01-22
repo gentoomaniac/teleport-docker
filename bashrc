@@ -2,7 +2,7 @@ export TELEPORT_PROXY="${TELEPORT_PROXY:-something.teleport.sh:443}"
 export PROD_ROLES="${PROD_ROLES:-production-user}"
 export LISTEN_ADDR="${LISTEN_ADDR:-0.0.0.0}"
 export LISTEN_PORT="${LISTEN_PORT:-4242}"
-export KUBECTL_VERSION="${KUBECTL_VERSION:-1.21}"
+export KUBECTL_VERSION="${KUBECTL_VERSION:-1.25}"
 export TEAM="${TEAM:-nabu}"
 
 # set bash timeout to 15 min
@@ -56,8 +56,8 @@ if [ -f '/home/user/google-cloud-sdk/completion.bash.inc' ]; then . '/home/user/
 source /etc/bash_completion
 source <(kubectl completion bash)
 
-alias tsh-init="tsh login --proxy=${TELEPORT_PROXY} --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
-alias kube-ls="tsh kube ls"
+alias tsh-init="tsh login --proxy=${TELEPORT_PROXY} --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT} --ttl 1800"
+alias kube-ls="tsh kube ls --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
 alias kube-login="tsh kube login --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
 
 alias kubectl="kubectl.${KUBECTL_VERSION} --as=reader"
@@ -68,9 +68,9 @@ complete -o default -F __start_kubectl kwacc
 
 function tsh-prod() {
     if [[ "${1}" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}.*$ ]]; then
-        tsh login --request-id="${1} --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT}"
+        tsh login --request-id="${1}" --bind-addr="${LISTEN_ADDR}:${LISTEN_PORT}" --ttl 1800
     else
-        CMD="tsh login --proxy=${TELEPORT_PROXY} --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT} --request-roles=${PROD_ROLES}"
+        CMD="tsh login --proxy=${TELEPORT_PROXY} --bind-addr=${LISTEN_ADDR}:${LISTEN_PORT} --request-roles=\"${PROD_ROLES}\" --ttl=1800"
         if [ ! -z "${1}" ]; then
             CMD+=" --request-reason=\"${1}\""
         fi
