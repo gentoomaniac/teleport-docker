@@ -7,4 +7,4 @@ docker run --interactive --tty --rm \
     -e "PROD_ROLES=${PROD_ROLES:-xxxx-production-user}" \
     -e "TELEPORT_PROXY=${TELEPORT_PROXY:-xxxx.teleport.sh:443}" \
     -e "LISTEN_PORT=${TELEPORT_PORT:-${DEFAULT_PORT}}" \
-    -v "${HOME}/.tsh:/home/user/.tsh" teleport
+    -v "${HOME}/.tsh:/home/user/.tsh" ghcr.io/gentoomaniac/teleport-docker
