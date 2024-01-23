@@ -1,7 +1,7 @@
 ARG OS=ubuntu
 ARG CODENAME=jammy
 ARG TELEPORT_VERSION=14.2.1
-ARG CLOUDCLI_ARCH=x86_64
+ARG CLOUDCLI_ARCH=arm
 ARG CLOUDCLI_VERSION=456.0.0
 
 FROM ${OS}:${CODENAME}
@@ -25,10 +25,7 @@ RUN useradd --create-home --shell /usr/bin/bash user
 USER user
 WORKDIR /home/user
 
-RUN case ${TARGETARCH} in \
-    "linux/arm64")  CLOUDCLI_ARCH=arm  ;; \
-    esac && \
-    curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
+RUN curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
     tar xf "google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
     ./google-cloud-sdk/install.sh && \
     /home/user/google-cloud-sdk/bin/gcloud components install kubectl
