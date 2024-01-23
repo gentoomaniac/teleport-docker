@@ -31,4 +31,4 @@ jobs:
           context: .
           platforms: linux/arm64
           push: true
-          tags: ghcr.io/gentoomaniac/teleport:latest
+          tags: ghcr.io/gentoomaniac/teleport-docker:latest
