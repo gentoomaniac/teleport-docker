@@ -14,7 +14,7 @@ ARG CLOUDCLI_VERSION
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Europe/Stockholm
 
-RUN apt update && apt install --yes curl bash-completion gawk vim-nox less python3 jq ca-certificates
+RUN apt update && apt install --yes curl bash-completion gawk vim-nox neovim less python3 jq ca-certificates
 
 RUN curl https://goteleport.com/static/install.sh | bash -s ${TELEPORT_VERSION}
 
@@ -31,5 +31,6 @@ RUN curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-c
     /home/user/google-cloud-sdk/bin/gcloud components install kubectl
 
 COPY bashrc /home/user/.bashrc
+RUN mkdir /home/user/.config/nvim
 
-VOLUME [ "/home/user/.tsh" ]
+VOLUME [ "/home/user/.tsh", "/home/user/.config/nvim" ]
