@@ -1,8 +1,8 @@
 ARG OS=ubuntu
 ARG CODENAME=jammy
-ARG TELEPORT_VERSION=14.2.1
+ARG TELEPORT_VERSION=15.3.1
 ARG CLOUDCLI_ARCH=arm
-ARG CLOUDCLI_VERSION=456.0.0
+ARG CLOUDCLI_VERSION=476.0.0
 
 FROM ${OS}:${CODENAME}
 
@@ -26,9 +26,9 @@ USER user
 WORKDIR /home/user
 
 RUN curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
-    tar xf "google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
-    ./google-cloud-sdk/install.sh && \
-    /home/user/google-cloud-sdk/bin/gcloud components install kubectl
+  tar xf "google-cloud-cli-${CLOUDCLI_VERSION}-linux-${CLOUDCLI_ARCH?}.tar.gz" && \
+  ./google-cloud-sdk/install.sh && \
+  /home/user/google-cloud-sdk/bin/gcloud components install kubectl
 
 COPY bashrc /home/user/.bashrc
 RUN mkdir /home/user/.config/nvim

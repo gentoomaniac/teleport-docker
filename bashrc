@@ -2,7 +2,7 @@ export TELEPORT_PROXY="${TELEPORT_PROXY:-something.teleport.sh:443}"
 export PROD_ROLES="${PROD_ROLES:-production-user}"
 export LISTEN_ADDR="${LISTEN_ADDR:-0.0.0.0}"
 export LISTEN_PORT="${LISTEN_PORT:-4242}"
-export KUBECTL_VERSION="${KUBECTL_VERSION:-1.25}"
+export KUBECTL_VERSION="${KUBECTL_VERSION:-1.29}"
 export TEAM="${TEAM:-nabu}"
 
 # set bash timeout to 15 min
